@@ -445,8 +445,8 @@ static const HAPStringCharacteristic coSensorNameCharacteristic = {
 const HAPBoolCharacteristic coDetectedCharacteristic = {
     .format = kHAPCharacteristicFormat_Bool,
     .iid = kIID_COSensorDetected,
-    .characteristicType = &kHAPCharacteristicType_On,
-    .debugDescription = kHAPCharacteristicDebugDescription_On,
+    .characteristicType = &kHAPCharacteristicType_CarbonMonoxideDetected,
+    .debugDescription = kHAPCharacteristicDebugDescription_CarbonMonoxideDetected,
     .manufacturerDescription = NULL,
     .properties = { .readable = true,
                     .writable = true,
@@ -474,6 +474,6 @@ const HAPService coSensorService = {
     .linkedServices = NULL,
     .characteristics = (const HAPCharacteristic* const[]) { &coSensorServiceSignatureCharacteristic,
                                                             &coSensorNameCharacteristic,
-                                                            &coSensorDetectedCharacteristic,
+                                                            &coDetectedCharacteristic,
                                                             NULL }
 };
