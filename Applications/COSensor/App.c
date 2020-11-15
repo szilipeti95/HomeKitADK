@@ -53,6 +53,8 @@
 typedef struct {
     struct {
         bool coDetected;
+        float level;
+        float peakLevel;
     } state;
     HAPAccessoryServerRef* server;
     HAPPlatformKeyValueStoreRef keyValueStore;
@@ -177,6 +179,82 @@ HAPError HandleCOSensorDetectedWrite(
     return kHAPError_None;
 }
 
+/**
+ * Handle read request to the 'On' characteristic of the Light Bulb service.
+ */
+HAP_RESULT_USE_CHECK
+HAPError HandleCOSensorLevelRead(
+        HAPAccessoryServerRef* server HAP_UNUSED,
+        const HAPFloatCharacteristicReadRequest* request HAP_UNUSED,
+        float* value,
+        void* _Nullable context HAP_UNUSED) {
+    *value = accessoryConfiguration.state.level;
+    HAPLogInfo(&kHAPLog_Default, "%s: %g", __func__, *value);
+
+    return kHAPError_None;
+}
+
+/**
+ * Handle write request to the 'On' characteristic of the Light Bulb service.
+ */
+HAP_RESULT_USE_CHECK
+HAPError HandleCOSensorLevelWrite(
+        HAPAccessoryServerRef* server HAP_UNUSED,
+        const HAPFloatCharacteristicWriteRequest* request HAP_UNUSED,
+        float value,
+        void* _Nullable context HAP_UNUSED) {
+    HAPLogInfo(&kHAPLog_Default, "%s: %g", __func__, value);
+
+    if (accessoryConfiguration.state.level != value) {
+        accessoryConfiguration.state.level = value;
+
+        SaveAccessoryState();
+
+        HAPAccessoryServerRaiseEvent(server, request->characteristic, request->service, request->accessory);
+    }
+
+    return kHAPError_None;
+}
+
+/**
+ * Handle read request to the 'On' characteristic of the Light Bulb service.
+ */
+HAP_RESULT_USE_CHECK
+HAPError HandleCOSensorPeakLevelRead(
+        HAPAccessoryServerRef* server HAP_UNUSED,
+        const HAPFloatCharacteristicReadRequest* request HAP_UNUSED,
+        float* value,
+        void* _Nullable context HAP_UNUSED) {
+    *value = accessoryConfiguration.state.peakLevel;
+    HAPLogInfo(&kHAPLog_Default, "%s: %g", __func__, *value);
+
+    return kHAPError_None;
+}
+
+/**
+ * Handle write request to the 'On' characteristic of the Light Bulb service.
+ */
+HAP_RESULT_USE_CHECK
+HAPError HandleCOSensorPeakLevelWrite(
+        HAPAccessoryServerRef* server HAP_UNUSED,
+        const HAPFloatCharacteristicWriteRequest* request HAP_UNUSED,
+        float value,
+        void* _Nullable context HAP_UNUSED) {  
+    HAPLogInfo(&kHAPLog_Default, "%s: %g", __func__, value);
+
+    if (accessoryConfiguration.state.peakLevel != value) {
+        accessoryConfiguration.state.peakLevel = value;
+
+        SaveAccessoryState();
+
+        HAPAccessoryServerRaiseEvent(server, request->characteristic, request->service, request->accessory);
+    }
+
+    return kHAPError_None;
+
+}
+
+
 //----------------------------------------------------------------------------------------------------------------------
 
 void AccessoryNotification(
@@ -199,6 +277,11 @@ void AppCreate(HAPAccessoryServerRef* server, HAPPlatformKeyValueStoreRef keyVal
     accessoryConfiguration.server = server;
     accessoryConfiguration.keyValueStore = keyValueStore;
     LoadAccessoryState();
+
+    accessoryConfiguration.state.coDetected = true;
+    accessoryConfiguration.state.level = 50;
+    accessoryConfiguration.state.peakLevel = 60;
+    SaveAccessoryState();
 }
 
 void AppRelease(void) {

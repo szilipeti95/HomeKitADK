@@ -40,8 +40,10 @@
 #define kIID_COSensorServiceSignature ((uint64_t) 0x0031)
 #define kIID_COSensorName             ((uint64_t) 0x0032)
 #define kIID_COSensorDetected         ((uint64_t) 0x0033)
+#define kIID_COSensorLevel            ((uint64_t) 0x0034)
+#define kIID_COSensorPeakLevel        ((uint64_t) 0x0035)
 
-HAP_STATIC_ASSERT(kAttributeCount == 9 + 3 + 5 + 4, AttributeCount_mismatch);
+HAP_STATIC_ASSERT(kAttributeCount == 9 + 3 + 5 + 6, AttributeCount_mismatch);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -462,6 +464,64 @@ const HAPBoolCharacteristic coDetectedCharacteristic = {
     .callbacks = { .handleRead = HandleCOSensorDetectedRead, .handleWrite = HandleCOSensorDetectedWrite }
 };
 
+
+/**
+ * The 'On' characteristic of the Light Bulb service.
+ */
+const HAPFloatCharacteristic coLevelCharacteristic = {
+    .format = kHAPCharacteristicFormat_Float,
+    .iid = kIID_COSensorLevel,
+    .characteristicType = &kHAPCharacteristicType_CarbonMonoxideLevel,
+    .debugDescription = kHAPCharacteristicDebugDescription_CarbonMonoxideLevel,
+    .manufacturerDescription = NULL,
+    .properties = { .readable = true,
+                    .writable = true,
+                    .supportsEventNotification = true,
+                    .hidden = false,
+                    .requiresTimedWrite = false,
+                    .supportsAuthorizationData = false,
+                    .ip = { .controlPoint = false, .supportsWriteResponse = false },
+                    .ble = { .supportsBroadcastNotification = true,
+                             .supportsDisconnectedNotification = true,
+                             .readableWithoutSecurity = false,
+                             .writableWithoutSecurity = false } },
+    .callbacks = { .handleRead = HandleCOSensorLevelRead, .handleWrite = HandleCOSensorLevelWrite },
+    .constraints = {
+        .minimumValue = 0,
+        .maximumValue = 1600,
+        .stepValue = 1
+    }
+};
+
+
+/**
+ * The 'On' characteristic of the Light Bulb service.
+ */
+const HAPFloatCharacteristic coPeakLevelCharacteristic = {
+    .format = kHAPCharacteristicFormat_Float,
+    .iid = kIID_COSensorPeakLevel,
+    .characteristicType = &kHAPCharacteristicType_CarbonMonoxidePeakLevel,
+    .debugDescription = kHAPCharacteristicDebugDescription_CarbonMonoxidePeakLevel,
+    .manufacturerDescription = NULL,
+    .properties = { .readable = true,
+                    .writable = true,
+                    .supportsEventNotification = true,
+                    .hidden = false,
+                    .requiresTimedWrite = false,
+                    .supportsAuthorizationData = false,
+                    .ip = { .controlPoint = false, .supportsWriteResponse = false },
+                    .ble = { .supportsBroadcastNotification = true,
+                             .supportsDisconnectedNotification = true,
+                             .readableWithoutSecurity = false,
+                             .writableWithoutSecurity = false } },
+    .callbacks = { .handleRead = HandleCOSensorPeakLevelRead, .handleWrite = HandleCOSensorPeakLevelWrite },
+    .constraints = {
+        .minimumValue = 0,
+        .maximumValue = 1600,
+        .stepValue = 1
+    }
+};
+
 /**
  * The Light Bulb service that contains the 'On' characteristic.
  */
@@ -475,5 +535,7 @@ const HAPService coSensorService = {
     .characteristics = (const HAPCharacteristic* const[]) { &coSensorServiceSignatureCharacteristic,
                                                             &coSensorNameCharacteristic,
                                                             &coDetectedCharacteristic,
+                                                            &coLevelCharacteristic,
+                                                            &coPeakLevelCharacteristic,
                                                             NULL }
 };

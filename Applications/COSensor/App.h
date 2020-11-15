@@ -53,6 +53,46 @@ HAPError HandleCOSensorDetectedWrite(
         void* _Nullable context);
 
 /**
+ * Handle read request to the 'On' characteristic of the Light Bulb service.
+ */
+HAP_RESULT_USE_CHECK
+HAPError HandleCOSensorLevelRead(
+        HAPAccessoryServerRef* server,
+        const HAPFloatCharacteristicReadRequest* request,
+        float* value,
+        void* _Nullable context);
+
+/**
+ * Handle write request to the 'On' characteristic of the Light Bulb service.
+ */
+HAP_RESULT_USE_CHECK
+HAPError HandleCOSensorLevelWrite(
+        HAPAccessoryServerRef* server,
+        const HAPFloatCharacteristicWriteRequest* request,
+        float value,
+        void* _Nullable context);
+
+/**
+ * Handle read request to the 'On' characteristic of the Light Bulb service.
+ */
+HAP_RESULT_USE_CHECK
+HAPError HandleCOSensorPeakLevelRead(
+        HAPAccessoryServerRef* server,
+        const HAPFloatCharacteristicReadRequest* request,
+        float* value,
+        void* _Nullable context);
+
+/**
+ * Handle write request to the 'On' characteristic of the Light Bulb service.
+ */
+HAP_RESULT_USE_CHECK
+HAPError HandleCOSensorPeakLevelWrite(
+        HAPAccessoryServerRef* server,
+        const HAPFloatCharacteristicWriteRequest* request,
+        float value,
+        void* _Nullable context);
+
+/**
  * Initialize the application.
  */
 void AppCreate(HAPAccessoryServerRef* server, HAPPlatformKeyValueStoreRef keyValueStore);
