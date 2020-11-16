@@ -124,6 +124,8 @@ void AccessoryServerHandleSessionInvalidate(
  */
 void RestorePlatformFactorySettings(void);
 
+void RaiseEvent(void);
+
 /**
  * Returns pointer to accessory information
  */

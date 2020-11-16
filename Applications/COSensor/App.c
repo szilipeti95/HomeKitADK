@@ -291,6 +291,19 @@ void AppAccessoryServerStart(void) {
     HAPAccessoryServerStart(accessoryConfiguration.server, &accessory);
 }
 
+
+void RaiseEvent(void) {
+    accessoryConfiguration.state.coDetected = !accessoryConfiguration.state.coDetected;
+    SaveAccessoryState();
+    AccessoryNotification(
+        &accessory,
+        &coSensorService,
+        &coDetectedCharacteristic, 
+        NULL
+    );
+}
+
+
 //----------------------------------------------------------------------------------------------------------------------
 
 void AccessoryServerHandleUpdatedState(HAPAccessoryServerRef* server, void* _Nullable context) {
